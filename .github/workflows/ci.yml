@@ -1,0 +1,78 @@
+name: CI
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  test:
+    name: Test
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        scala: [3.7.3]
+        java: [17, 21]
+    
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v5
+      
+    - name: Setup JDK
+      uses: actions/setup-java@v5
+      with:
+        distribution: 'temurin'
+        java-version: ${{ matrix.java }}
+        cache: 'sbt'
+        
+    - name: Setup SBT
+      uses: sbt/setup-sbt@v1
+        
+    - name: Run tests
+      run: sbt test
+
+  scalafmt:
+    name: Code Formatting
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v5
+      
+    - name: Setup JDK
+      uses: actions/setup-java@v5
+      with:
+        distribution: 'temurin'
+        java-version: 17
+        cache: 'sbt'
+        
+    - name: Setup SBT
+      uses: sbt/setup-sbt@v1
+        
+    - name: Check code formatting
+      run: sbt scalafmtCheckAll
+      
+  compile:
+    name: Compile
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v5
+      
+    - name: Setup JDK
+      uses: actions/setup-java@v5
+      with:
+        distribution: 'temurin'
+        java-version: 17
+        cache: 'sbt'
+        
+    - name: Setup SBT
+      uses: sbt/setup-sbt@v1
+        
+    - name: Compile main
+      run: sbt compile
+      
+    - name: Compile tests
+      run: sbt Test/compile
