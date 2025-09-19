@@ -31,6 +31,6 @@ lazy val root = project
     .enablePlugins(DynVerPlugin, BuildInfoPlugin)
     .settings(
       buildInfoKeys    := Seq[BuildInfoKey](name, version, scalaVersion, sbtVersion, libraryDependencies),
-      buildInfoPackage := "io.github.zrhmn.sdl",
-      buildInfoOptions ++= Seq(BuildInfoOption.BuildTime, BuildInfoOption.ConstantValue),
+      buildInfoPackage := "io.github.zrhmn.ssdl",
+      buildInfoOptions ++= Seq(BuildInfoOption.ConstantValue, BuildInfoOption.PackagePrivate),
     )
